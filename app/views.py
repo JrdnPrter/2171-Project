@@ -11,6 +11,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm
 from app.models import EmployeeProfile
 from werkzeug.security import check_password_hash
+from .forms import BookingForm
 
 
 ###
@@ -26,8 +27,29 @@ def home():
 @app.route('/about/')
 def about():
     """Render the website's about page."""
-    return render_template('about.html', name="Mary Jane")
+    return render_template('about.html', name="TRK Party Rentals")
 
+@app.route('/booking/', methods=['GET', 'POST'])
+@login_required
+def createBooking():
+    myForm = BookingForm()
+    
+    if request.method == 'POST':
+        
+        if myForm.validate_on_submit():
+
+            clientName = myForm.clientName.data
+            contact = myForm.contact.data
+            eventDate = myForm.eventDate.data
+            address = myForm.address.data
+            equipment = myForm.equipment.data
+
+            
+
+        flash('Booking created Successfully.', 'success')
+        return redirect(url_for('home'))    
+
+    return render_template('booking.html', form = myForm)
 
 ###
 # The functions below should be applicable to all Flask apps.
@@ -87,7 +109,7 @@ def login():
             if user is not None and check_password_hash(user.password,password):
             
                 login_user(user)
-                flash("Logged in sucessfully.", 'sucess')
+                flash("Logged in sucessfully.", 'success')
                 return redirect(url_for("secure_page"))
             else:
                 flash("Incorrect username or password", "failure")  # they should be redirected to a secure-page route instead
