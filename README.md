@@ -29,5 +29,18 @@ python run.py
 
 Go to :
 http://localhost:8080/
+
+
+
+Creating a new User to log in with:
+$ python
+>>> from app import db
+>>> from app.models import UserProfile
+>>> user = UserProfile(first_name="Your name",
+last_name="Your last name", username="someusername",
+password="somepassword")
+>>> db.session.add(user)
+>>> db.session.commit()
+>>> quit()
 ```
 
