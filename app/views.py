@@ -99,6 +99,41 @@ def send_text_file(file_name):
     file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
 
+@app.route('/viewBooking')
+def viewBooking():
+    bookings = Booking.query.all()
+    return render_template('viewBooking.html',bookings=bookings)
+
+@app.route('/viewBooking/<bookingid>',methods=['GET','POST'])
+def editBooking(bookingid):
+    bookForm = BookingForm()
+    requestedBooking = Booking.query.get(bookingid)
+    if request.method =='POST':
+            clientFName = bookForm.clientFName.data
+            clientLName = bookForm.clientLName.data
+            contact = bookForm.contact.data
+            eventDate = bookForm.eventDate.data
+            address = bookForm.address.data
+
+
+            requestedBooking.cfname=clientFName
+            requestedBooking.clname=clientLName
+            requestedBooking.phone=contact
+            requestedBooking.event_date=eventDate
+            requestedBooking.address=address
+            db.session.commit()
+
+            flash("Booking Updated")
+            return redirect(url_for('viewBooking'))
+    
+
+
+    bookForm.clientFName.data=requestedBooking.cfname
+    bookForm.clientLName.data=requestedBooking.clname
+    bookForm.contact.data=requestedBooking.phone
+    bookForm.eventDate.data=requestedBooking.event_date
+    bookForm.address.data=requestedBooking.address
+    return render_template('editBooking.html',bookingid=bookingid,form=bookForm)
 
 @app.after_request
 def add_header(response):

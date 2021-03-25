@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block main %}
+{{ form.csrf_token }}
+
+<h1>Edit Booking</h1>
+
+<form action="{{ url_for('editBooking',bookingid=bookingid) }}" method="post" enctype="multipart/form-data">
+
+
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.clientFName.label }} {{ form.clientFName(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.clientLName.label }} {{ form.clientLName(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.contact.label }} {{ form.contact(class="form-control", placeholder='18765555555') }}
+        </div>
+        <div class="form-group">
+            {{ form.eventDate.label }} {{ form.eventDate(class="form-control", placeholder='2018-06-28') }}
+        </div>
+        <div class="form-group">
+            {{ form.address.label }} {{ form.address(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.equipment.label }} {{ form.equipment(class="form-control") }}
+        </div>
+        
+        <div>{{ form.submit}}</div>
+        
+</form>
+{% endblock %}

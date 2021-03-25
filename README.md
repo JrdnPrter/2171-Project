@@ -35,7 +35,7 @@ http://localhost:8080/
 Create an initial admin user:
 $ python
 >>> from app import db
->>> from app.models import <Table name>
+>>> from app.models import EmployeeProfile
 >>> user = EmployeeProfile(first_name="John",
 last_name="Brown", password="admin",position="Sup",id="Emp-1")
 >>> db.session.add(user)
