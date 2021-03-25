@@ -8,10 +8,10 @@ This file creates your application.
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm
+from app.forms import LoginForm, BookingForm, EmployeeForm
 from app.models import EmployeeProfile
 from werkzeug.security import check_password_hash
-from .forms import BookingForm
+
 
 
 ###
@@ -30,26 +30,46 @@ def about():
     return render_template('about.html', name="TRK Party Rentals")
 
 @app.route('/booking/', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def createBooking():
-    myForm = BookingForm()
+    bookForm = BookingForm()
     
     if request.method == 'POST':
         
-        if myForm.validate_on_submit():
+        if bookForm.validate_on_submit():
 
-            clientName = myForm.clientName.data
-            contact = myForm.contact.data
-            eventDate = myForm.eventDate.data
-            address = myForm.address.data
-            equipment = myForm.equipment.data
+            clientName = bookForm.clientName.data
+            contact = bookForm.contact.data
+            eventDate = bookForm.eventDate.data
+            address = bookForm.address.data
+            equipment = bookForm.equipment.data
+
+            flash(equipment, 'success')
 
             
 
         flash('Booking created Successfully.', 'success')
         return redirect(url_for('home'))    
 
-    return render_template('booking.html', form = myForm)
+    return render_template('booking.html', form = bookForm)
+
+@app.route('/newEmployee/', methods=['GET', 'POST'])
+# @login_required
+def newEmployee():
+    empForm = EmployeeForm()
+    
+    if request.method == 'POST':
+        
+        if empForm.validate_on_submit():
+
+            employeeName = empForm.employeeName.data
+            dob = empForm.dob.data
+            sex = empForm.sex.data            
+
+        flash('Employee registered successfully.', 'success')
+        return redirect(url_for('home'))    
+
+    return render_template('employee.html', form = empForm)
 
 ###
 # The functions below should be applicable to all Flask apps.
