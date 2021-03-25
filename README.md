@@ -37,7 +37,7 @@ $ python
 >>> from app import db
 >>> from app.models import <Table name>
 >>> user = EmployeeProfile(first_name="John",
-last_name="Brown", password="admin",position="Sup")
+last_name="Brown", password="admin",position="Sup",id="Emp-1")
 >>> db.session.add(user)
 >>> db.session.commit()
 >>> quit()
