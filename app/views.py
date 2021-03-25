@@ -9,11 +9,11 @@ from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm, BookingForm, EmployeeForm
-from app.models import EmployeeProfile
+from app.models import EmployeeProfile, Booking
 from werkzeug.security import check_password_hash
 
 
-
+EMP_TRACK=0
 ###
 # Routing for your application.
 ###
@@ -30,20 +30,23 @@ def about():
     return render_template('about.html', name="TRK Party Rentals")
 
 @app.route('/booking/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def createBooking():
     bookForm = BookingForm()
-    
     if request.method == 'POST':
         
         if bookForm.validate_on_submit():
 
-            clientName = bookForm.clientName.data
+            clientFName = bookForm.clientFName.data
+            clientLName = bookForm.clientLName.data
             contact = bookForm.contact.data
             eventDate = bookForm.eventDate.data
             address = bookForm.address.data
             equipment = bookForm.equipment.data
 
+            booking = Booking(clientFName,clientLName,contact,eventDate,address)
+            db.session.add(booking)
+            db.session.commit()
             flash(equipment, 'success')
 
             
@@ -54,7 +57,7 @@ def createBooking():
     return render_template('booking.html', form = bookForm)
 
 @app.route('/newEmployee/', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def newEmployee():
     empForm = EmployeeForm()
     
@@ -62,10 +65,16 @@ def newEmployee():
         
         if empForm.validate_on_submit():
 
-            employeeName = empForm.employeeName.data
+            employeeFName = empForm.employeeFName.data
+            employeLName = empForm.employeeLName.data
             dob = empForm.dob.data
-            sex = empForm.sex.data            
-
+            sex = empForm.sex.data   
+            pos = empForm.position.data       
+            password=empForm.password.data  
+            id = trackEmployee(EMP_TRACK)
+            employee = EmployeeProfile(employeeFName,employeLName,id,password,pos)
+            db.session.add(employee)
+            db.session.commit()
         flash('Employee registered successfully.', 'success')
         return redirect(url_for('home'))    
 
@@ -119,25 +128,23 @@ def logout():
 def login():
     form = LoginForm()
     if request.method == "POST":
-        # change this to actually validate the entire form submission
-        # and not just one field
         if form.validate_on_submit:
-            username = form.username.data
+            Id = form.id.data
             password = form.password.data
 
-            user = EmployeeProfile.query.filter_by(username=username).first()
+            user = EmployeeProfile.query.filter_by(empid=Id).first()
             if user is not None and check_password_hash(user.password,password):
             
                 login_user(user)
                 flash("Logged in sucessfully.", 'success')
                 return redirect(url_for("secure_page"))
             else:
-                flash("Incorrect username or password", "failure")  # they should be redirected to a secure-page route instead
+                flash("Incorrect Id or password", "failure")
     return render_template("login.html", form=form)   
 
 @login_manager.user_loader
-def load_user(id):
-    return EmployeeProfile.query.get(int(id))
+def load_user(empid):
+    return EmployeeProfile.query.get(empid)
 
 @app.route('/secure-page/')
 @login_required
@@ -147,5 +154,8 @@ def secure_page():
     else:
         return redirect(url_for('login'))
 
+def trackEmployee(EMP_TRACK):
+    EMP_TRACK +=1
+    return EMP_TRACK
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0",port="8080")

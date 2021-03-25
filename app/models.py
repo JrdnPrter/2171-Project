@@ -9,17 +9,19 @@ class EmployeeProfile(db.Model):
     # to `user_profiles` (plural) or some other name.
     __tablename__ = 'employee_profiles'
 
-    id = db.Column(db.Integer, primary_key=True)
+    empid = db.Column(db.String(10), primary_key=True)
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
-    username = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(255))
+    position = db.Column(db.String(3))
 
-    def __init__(self,first_name,last_name,username,password):
+
+    def __init__(self,first_name,last_name,id,password,position):
         self.first_name = first_name
         self.last_name = last_name
-        self.username = username
         self.password = generate_password_hash(password,method="pbkdf2:sha256")
+        self.position = position
+        self.empid='Emp-' + str(id)
 
 
     def is_authenticated(self):
@@ -31,11 +33,34 @@ class EmployeeProfile(db.Model):
     def is_anonymous(self):
         return False
 
+    def is_supervisor(self):
+        if self.position == "Sup":
+            return True
+        else:
+            return False
+
     def get_id(self):
         try:
-            return unicode(self.id)  # python 2 support
+            return unicode(self.empid)  # python 2 support
         except NameError:
-            return str(self.id)  # python 3 support
+            return self.empid  # python 3 support
 
     def __repr__(self):
-        return '<User %r>' % (self.username)
+        return '<User %r>' % (self.empid)
+
+
+class Booking(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    cfname = db.Column(db.String(40))
+    clname=db.Column(db.String(40))
+    phone = db.Column(db.Integer)
+    event_date = db.Column(db.Date)
+    address = db.Column(db.String(225))
+    
+
+    def __init__(self,cfname,clname,phone,event_date,address):
+        self.cfname=cfname
+        self.clname=clname
+        self.phone=phone
+        self.event_date=event_date
+        self.address=address

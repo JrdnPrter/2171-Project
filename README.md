@@ -35,7 +35,7 @@ http://localhost:8080/
 Creating a new User to log in with:
 $ python
 >>> from app import db
->>> from app.models import UserProfile
+>>> from app.models import <Table name>
 >>> user = UserProfile(first_name="Your name",
 last_name="Your last name", username="someusername",
 password="somepassword")

@@ -6,7 +6,7 @@ from wtforms.validators import InputRequired, DataRequired
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[InputRequired()])
+    id = StringField('Employee Id', validators=[InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
 
 #for use in the create booking form.
@@ -22,8 +22,12 @@ class EquipmentForm(FlaskForm):
 
 #create booking
 class BookingForm(FlaskForm):
-    clientName = StringField('Client Name', 
+    clientFName = StringField('Client First Name', 
                                 validators=[DataRequired()])
+
+    clientLName = StringField('Client Last Name', 
+                                validators=[DataRequired()])
+                            
 
     contact = StringField('Phone Number (10-digit)', 
                                 validators=[DataRequired()])
@@ -44,7 +48,9 @@ class BookingForm(FlaskForm):
 #register new employee
 class EmployeeForm(FlaskForm):
 
-    employeeName = StringField('Name',
+    employeeFName = StringField('First Name',
+                                validators=[DataRequired()])
+    employeeLName = StringField('Last Name',
                                 validators=[DataRequired()])
 
     dob = DateField('Date of Birth (YYYY/MM/DD)', 
@@ -54,6 +60,13 @@ class EmployeeForm(FlaskForm):
                         choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Other')],
                         validators=[DataRequired()])
     
+    password = StringField('Password',
+                                validators=[DataRequired()])
+                                
     register = SubmitField("Register new employee")
+
+    position = SelectField('Registered Position',
+                                choices=[('Sup', 'Supervisor'), ('Emp', 'Employee')],
+                        validators=[DataRequired()])
 
 
