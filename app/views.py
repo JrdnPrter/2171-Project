@@ -71,11 +71,11 @@ def newEmployee():
             sex = empForm.sex.data   
             pos = empForm.position.data       
             password=empForm.password.data  
-            id = trackEmployee(EMP_TRACK)
+            id = trackEmployee()
             employee = EmployeeProfile(employeeFName,employeLName,id,password,pos)
             db.session.add(employee)
             db.session.commit()
-        flash('Employee registered successfully.', 'success')
+        flash('Employee registered successfully. Employee ID is Emp-' + str(id), 'success')
         return redirect(url_for('home'))    
 
     return render_template('employee.html', form = empForm)
@@ -136,7 +136,6 @@ def login():
             if user is not None and check_password_hash(user.password,password):
             
                 login_user(user)
-                flash("Logged in sucessfully.", 'success')
                 return redirect(url_for("secure_page"))
             else:
                 flash("Incorrect Id or password", "failure")
@@ -154,7 +153,8 @@ def secure_page():
     else:
         return redirect(url_for('login'))
 
-def trackEmployee(EMP_TRACK):
+def trackEmployee():
+    global EMP_TRACK
     EMP_TRACK +=1
     return EMP_TRACK
 if __name__ == '__main__':

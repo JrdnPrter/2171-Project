@@ -32,15 +32,16 @@ http://localhost:8080/
 
 
 
-Creating a new User to log in with:
+Create an initial admin user:
 $ python
 >>> from app import db
 >>> from app.models import <Table name>
->>> user = UserProfile(first_name="Your name",
-last_name="Your last name", username="someusername",
-password="somepassword")
+>>> user = EmployeeProfile(first_name="John",
+last_name="Brown", password="admin",position="Sup")
 >>> db.session.add(user)
 >>> db.session.commit()
 >>> quit()
+
+From here can create aditional users in the website as needed
 ```
 
