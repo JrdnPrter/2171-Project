@@ -9,7 +9,7 @@ from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm, BookingForm, EmployeeForm
-from app.models import EmployeeProfile, Booking
+from app.models import EmployeeProfile, Booking,EquipmentAssignments
 from werkzeug.security import check_password_hash
 
 
@@ -36,16 +36,25 @@ def createBooking():
     if request.method == 'POST':
         
         if bookForm.validate_on_submit():
-
+            equipmentList=[]
             clientFName = bookForm.clientFName.data
             clientLName = bookForm.clientLName.data
             contact = bookForm.contact.data
             eventDate = bookForm.eventDate.data
             address = bookForm.address.data
             equipment = bookForm.equipment.data
-
+            for key,value in equipment.items():
+                if value == True:
+                    equipmentList.append(key)
             booking = Booking(clientFName,clientLName,contact,eventDate,address)
             db.session.add(booking)
+            db.session.commit()
+            id = db.session.query(Booking).order_by(Booking.id.desc()).first()
+
+            
+            for item in equipmentList:
+                equip = EquipmentAssignments(bookingid=id.id,eqipmentid =item)
+                db.session.add(equip)
             db.session.commit()
             flash('Booking created Successfully.', 'success')
 
@@ -114,7 +123,6 @@ def editBooking(bookingid):
             contact = bookForm.contact.data
             eventDate = bookForm.eventDate.data
             address = bookForm.address.data
-
 
             requestedBooking.cfname=clientFName
             requestedBooking.clname=clientLName

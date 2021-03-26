@@ -1,6 +1,6 @@
 import os
 # 'postgresql://yourusername:yourpassword@localhost/databasename'
-database = "postgresql://mike:1234@localhost/2171"
+database = "postgresql://comp-2171:password@localhost/project"
 class Config(object):
     """Base Config Object"""
     DEBUG = False

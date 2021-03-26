@@ -64,3 +64,19 @@ class Booking(db.Model):
         self.contact=contact
         self.event_date=event_date
         self.address=address
+class Equipment(db.Model):
+    __tablename__ = 'equipment'
+    equip_id = db.Column(db.String(10),primary_key = True)
+    equip_name = db.Column(db.String(30))
+
+
+    def __init__(self, equip_id, equip_name,):
+        self.equip_id=  equip_id
+        self.equip_name=equip_name
+
+
+class EquipmentAssignments(db.Model):
+    __tablename__ = 'equipment_assignments'
+    bookingid = db.Column(db.Integer,db.ForeignKey(Booking.id),primary_key=True)
+    eqipmentid = db.Column(db.String(10),db.ForeignKey(Equipment.equip_id),primary_key=True)
+

@@ -14,10 +14,10 @@ class LoginForm(FlaskForm):
 class EquipmentForm(FlaskForm):
 
     
-    sound = BooleanField("Sound Systems")
-    light = BooleanField("Party Lights")
-    table = BooleanField("Tables")
-    chair = BooleanField("Chairs")
+    Eq_1 = BooleanField("Sound Systems")
+    Eq_2 = BooleanField("Party Lights")
+    Eq_3 = BooleanField("Tables")
+    Eq_4 = BooleanField("Chairs")
 
 
 #create booking
@@ -35,7 +35,7 @@ class BookingForm(FlaskForm):
     eventDate = DateField('Event Date (YYYY/MM/DD)', 
                                 validators=[DataRequired()])
 
-    eventTime = TimeField('Event Start Time (Hour:Minute) ')
+    eventTime = StringField('Event Start Time (Hour:Minute) ')
 
     address = StringField('Event Address', 
                                 validators=[DataRequired()])
