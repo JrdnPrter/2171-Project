@@ -47,11 +47,11 @@ def createBooking():
             booking = Booking(clientFName,clientLName,contact,eventDate,address)
             db.session.add(booking)
             db.session.commit()
-            flash(equipment, 'success')
+            flash('Booking created Successfully.', 'success')
 
             
 
-        flash('Booking created Successfully.', 'success')
+        
         return redirect(url_for('home'))    
 
     return render_template('booking.html', form = bookForm)
@@ -118,7 +118,7 @@ def editBooking(bookingid):
 
             requestedBooking.cfname=clientFName
             requestedBooking.clname=clientLName
-            requestedBooking.phone=contact
+            requestedBooking.contact=contact
             requestedBooking.event_date=eventDate
             requestedBooking.address=address
             db.session.commit()
@@ -130,7 +130,7 @@ def editBooking(bookingid):
 
     bookForm.clientFName.data=requestedBooking.cfname
     bookForm.clientLName.data=requestedBooking.clname
-    bookForm.contact.data=requestedBooking.phone
+    bookForm.contact.data=requestedBooking.contact
     bookForm.eventDate.data=requestedBooking.event_date
     bookForm.address.data=requestedBooking.address
     return render_template('editBooking.html',bookingid=bookingid,form=bookForm)

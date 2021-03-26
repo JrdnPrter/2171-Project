@@ -53,14 +53,14 @@ class Booking(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     cfname = db.Column(db.String(40))
     clname=db.Column(db.String(40))
-    phone = db.Column(db.Integer)
+    contact = db.Column(db.String(11))
     event_date = db.Column(db.Date)
     address = db.Column(db.String(225))
     
 
-    def __init__(self,cfname,clname,phone,event_date,address):
+    def __init__(self,cfname,clname,contact,event_date,address):
         self.cfname=cfname
         self.clname=clname
-        self.phone=phone
+        self.contact=contact
         self.event_date=event_date
         self.address=address
