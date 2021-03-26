@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>Register New Employee</h1>
+
+<form action="{{ url_for('newEmployee') }}" method="post" enctype="multipart/form-data">
+
+
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.employeeFName.label }} {{ form.employeeFName(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.employeeLName.label }} {{ form.employeeLName(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.dob.label }} {{ form.dob(class="form-control", placeholder='1993/02/21') }}
+        </div>
+        <div class="form-group">
+            {{ form.sex.label }} {{ form.sex(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.position.label }} {{ form.position(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.label }} {{ form.password(class="form-control") }}
+        </div>
+
+        <div>{{ form.register}}</div>
+        
+</form>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Bookings</h1>
+<div id="booking-list">
+    {% for booking in bookings %} 
+    <div class='booking'>
+        <div class="booking-info">
+            <h2>Booking #{{booking.id}}</h2>
+            <h2>Booking For {{ booking.cfname}} {{booking.clname}}</h2>
+            <h3>Requested Date: {{booking.event_date}}</h3>
+            <h3>Address: {{booking.address}}</h3>
+            <h4>Contact Information: {{booking.phone}}</h4>
+            <h5>Requested Eqipment: To Be added</h5>
+            <div class="view-booking">
+                <a href="{{url_for('editBooking',bookingid=booking.id)}}"> View Booking</a>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+</div>
+{% endblock %}
