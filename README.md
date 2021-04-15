@@ -17,11 +17,8 @@ postgresql will askyou to input a personal password. remember it
 
 Run these commands in posrgresql:
 create user "<username>";
-
 create database "<databasename>";
-
-\password <username> will (prompt for password, keep it simple)
-
+\password <username> will (propmpt for password, keep it simple)
 alter database <databasename> owner to <username>;
 
 go to config.py and change the database url to your database url 

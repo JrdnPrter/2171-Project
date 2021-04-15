@@ -22,6 +22,9 @@
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('viewBooking') }}">View Bookings</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('report') }}">Generate Report</a>
+      </li>
       {% elif current_user.is_authenticated %}
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('createBooking') }}">Book Event</a>

@@ -50,6 +50,7 @@ class EmployeeProfile(db.Model):
 
 
 class Booking(db.Model):
+    __tablename__ = 'booking'
     id = db.Column(db.Integer,primary_key=True)
     cfname = db.Column(db.String(40))
     clname=db.Column(db.String(40))
