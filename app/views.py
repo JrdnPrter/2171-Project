@@ -8,7 +8,7 @@ This file creates your application.
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import BookingForm, EmployeeForm, EquipmentForm, LoginForm
+from app.forms import BookingForm, EmployeeForm, EquipmentForm, LoginForm, SearchForm
 from app.models import Booking, EmployeeProfile, Equipment, EquipmentAssignments
 from werkzeug.security import check_password_hash
 import pdfkit
@@ -121,6 +121,28 @@ def viewBooking():
         bookings.append([item,equipment])
         print(equipment[0].equip_name)
     return render_template('viewBooking.html',bookings=bookings)
+
+@app.route('/client', methods=['GET', 'POST'])
+def clientSearch():
+    foundClient = []
+    results = None
+    sForm = SearchForm()
+
+    if request.method =='POST':
+        
+
+        Fname = request.form.get('clientFName')
+        Lname = request.form.get('clientLName')
+        
+        bookings = Booking.query.all()
+
+        
+        
+        results = db.session.execute('select * from booking where booking.cfname like :cfname AND booking.clname like :clname', {'cfname': Fname, 'clname': Lname}).all()
+        if results == []:
+                flash('Booking not found', 'danger')
+ 
+    return render_template('Client.html', form= sForm, results=results)
 
 @app.route('/viewBooking/<bookingid>',methods=['GET','POST'])
 def editBooking(bookingid):
