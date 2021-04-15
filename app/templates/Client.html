@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Search Client</h1>
+
+<form action="{{ url_for('clientSearch') }}" method="post" enctype="multipart/form-data">
+
+
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.clientFName.label }} {{ form.clientFName(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.clientLName.label }} {{ form.clientLName(class="form-control") }}
+        </div>
+
+        <div>{{ form.submit}}</div>
+        
+</form>
+
+<div id="booklist">
+    {% if results != None %}
+    {% for row in results %}
+    <div class='clients'>
+        <div class="client-info">
+            
+            <h4>Booking #{{row.id}}</h4>
+            <p>Client Name: {{row.cfname}} {{row.clname}}</p>
+            <p>Event Date: {{row.event_date}}</p>
+            <p>Address: {{row.address}}</p>
+            <p>Contact: {{row.contact}}</p>
+
+            <a href="{{url_for('editBooking',bookingid=row.id)}}"> Edit Booking</a>
+        
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
