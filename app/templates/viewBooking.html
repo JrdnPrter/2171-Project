@@ -5,12 +5,15 @@
     {% for booking in bookings %} 
     <div class='booking'>
         <div class="booking-info">
-            <h2>Booking #{{booking.id}}</h2>
-            <h2>Booking For {{ booking.cfname}} {{booking.clname}}</h2>
-            <h3>Requested Date: {{booking.event_date}}</h3>
-            <h3>Address: {{booking.address}}</h3>
-            <h4>Contact Information: {{booking.phone}}</h4>
-            <h5>Requested Eqipment: To Be added</h5>
+            <h2>Booking #{{booking[0].id}}</h2>
+            <h2>Booking For {{ booking[0].cfname}} {{booking[0].clname}}</h2>
+            <h3>Requested Date: {{booking[0].event_date}}</h3>
+            <h3>Address: {{booking[0].address}}</h3>
+            <h4>Contact Information: {{booking[0].contact}}</h4>
+            <h5>Requested Eqipment:</h5>
+            {% for equipment in booking[1] %}
+            <li> {{equipment.equip_name}} </li>
+            {%endfor%}
             <div class="view-booking">
                 <a href="{{url_for('editBooking',bookingid=booking.id)}}"> View Booking</a>
             </div>

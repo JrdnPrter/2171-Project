@@ -8,12 +8,16 @@ This file creates your application.
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm, BookingForm, EmployeeForm
-from app.models import EmployeeProfile, Booking,EquipmentAssignments
+from app.forms import BookingForm, EmployeeForm, EquipmentForm, LoginForm
+from app.models import Booking, EmployeeProfile, Equipment, EquipmentAssignments
 from werkzeug.security import check_password_hash
+import pdfkit
+from flask.helpers import make_response
+from datetime import date
+import datetime
+from collections import Counter
 
 
-EMP_TRACK=0
 ###
 # Routing for your application.
 ###
@@ -80,7 +84,7 @@ def newEmployee():
             sex = empForm.sex.data   
             pos = empForm.position.data       
             password=empForm.password.data  
-            id = trackEmployee()
+            id  = int(trackEmployee()) +1 
             employee = EmployeeProfile(employeeFName,employeLName,id,password,pos)
             db.session.add(employee)
             db.session.commit()
@@ -110,7 +114,12 @@ def send_text_file(file_name):
 
 @app.route('/viewBooking')
 def viewBooking():
-    bookings = Booking.query.all()
+    bookings = []
+    result = Booking.query.all()
+    for item in result:
+        equipment = db.session.query(Equipment.equip_name).join(EquipmentAssignments).filter(EquipmentAssignments.bookingid == item.id).all()
+        bookings.append([item,equipment])
+        print(equipment[0].equip_name)
     return render_template('viewBooking.html',bookings=bookings)
 
 @app.route('/viewBooking/<bookingid>',methods=['GET','POST'])
@@ -118,18 +127,32 @@ def editBooking(bookingid):
     bookForm = BookingForm()
     requestedBooking = Booking.query.get(bookingid)
     if request.method =='POST':
+            equipmentList = []
             clientFName = bookForm.clientFName.data
             clientLName = bookForm.clientLName.data
             contact = bookForm.contact.data
             eventDate = bookForm.eventDate.data
             address = bookForm.address.data
+            equipment = bookForm.equipment.data
+
+            EquipmentAssignments.query.filter_by(bookingid=bookingid).delete()
+            for key,value in equipment.items():
+                if value == True:
+                    equipmentList.append(key)
+
 
             requestedBooking.cfname=clientFName
             requestedBooking.clname=clientLName
             requestedBooking.contact=contact
             requestedBooking.event_date=eventDate
             requestedBooking.address=address
+            
+            for item in equipmentList:
+                equip = EquipmentAssignments(bookingid=bookingid,eqipmentid =item)
+                db.session.add(equip)
+            
             db.session.commit()
+            
 
             flash("Booking Updated")
             return redirect(url_for('viewBooking'))
@@ -141,6 +164,8 @@ def editBooking(bookingid):
     bookForm.contact.data=requestedBooking.contact
     bookForm.eventDate.data=requestedBooking.event_date
     bookForm.address.data=requestedBooking.address
+
+        
     return render_template('editBooking.html',bookingid=bookingid,form=bookForm)
 
 @app.after_request
@@ -159,7 +184,42 @@ def add_header(response):
 def page_not_found(error):
     """Custom 404 page."""
     return render_template('404.html'), 404
+@app.route('/report')
+def report():
+    today = datetime.datetime.today().strftime("%y-%m-%d")
+    result = db.session.query(Equipment.equip_name).join(EquipmentAssignments).all()
+    equipment = []
+    for item in result:
+        equipment.append(item[0])
+    equpCount = Counter(equipment).most_common()
+    bookingCount = db.session.execute('Select count(id) from booking').scalar()
+    bookings = db.session.query(Booking.id,Booking.cfname,Booking.clname,Booking.event_date).all()
+    breakdown = []
+    
+    for row in bookings:
+        items = []
+        assign = db.session.query(Equipment.equip_name).join(EquipmentAssignments).filter(EquipmentAssignments.bookingid == row[0]).all()
+        for i in assign:
+            items.append(i[0])
+            
+        breakdown.append([row,items])
 
+    for row, items in breakdown:
+        print(row,items)
+
+
+    config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+    css = ["app/static/css/app.css"]
+    options = {
+  "enable-local-file-access": ''
+}
+    rendered = render_template('report.html',today=today,equip = equpCount,bookings=bookingCount,breakdown=breakdown)
+    pdf = pdfkit.from_string(rendered,False,configuration=config,options=options,css=css)
+
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=Report-' + today +'.pdf'
+    return response
 @app.route('/logout/')
 @login_required
 def logout():
@@ -197,8 +257,8 @@ def secure_page():
         return redirect(url_for('login'))
 
 def trackEmployee():
-    global EMP_TRACK
-    EMP_TRACK +=1
-    return EMP_TRACK
+    user = EmployeeProfile.query.order_by(EmployeeProfile.empid.desc()).first()
+    return user.empid.split('-')[1]
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0",port="8080")
+
