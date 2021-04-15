@@ -69,4 +69,13 @@ class EmployeeForm(FlaskForm):
                                 choices=[('Sup', 'Supervisor'), ('Emp', 'Employee')],
                         validators=[DataRequired()])
 
+class SearchForm(FlaskForm):
+
+    clientFName = StringField('Client First Name', 
+                                validators=[DataRequired()])
+
+    clientLName = StringField('Client Last Name', 
+                                validators=[DataRequired()])
+
+    submit = SubmitField("Search")
 
