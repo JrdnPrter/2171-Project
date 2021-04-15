@@ -12,3 +12,39 @@ h1 .megamind{
     font-size: large;
     text-align: center;
 }
+
+#booklist {
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 10vh;
+    row-gap: 10vh;
+}
+
+.clients {
+    border-style: solid;
+    border-color: #000000;
+    border-radius: 10px;
+    border-width: 1.5px;
+}
+
+.client-info {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.client-info a {
+    background-color: #007bff;
+    color: white;
+    padding: 5px;
+    text-decoration: none;
+}
+
+.client-info a:hover {
+    background-color: #00bfff;
+    transition: 0.5s all;
+}
