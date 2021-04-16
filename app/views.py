@@ -141,6 +141,7 @@ def clientSearch():
         results = db.session.execute('select * from booking where booking.cfname like :cfname AND booking.clname like :clname', {'cfname': Fname, 'clname': Lname}).all()
         if results == []:
                 flash('Booking not found', 'danger')
+        results.sort()
  
     return render_template('Client.html', form= sForm, results=results)
 
