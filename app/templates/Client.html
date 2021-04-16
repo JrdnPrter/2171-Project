@@ -17,11 +17,11 @@
         
 </form>
 
-<div id="booklist">
+<div id="booking-list">
     {% if results != None %}
     {% for row in results %}
-    <div class='clients'>
-        <div class="client-info">
+    <div class='booking'>
+        <div class="booking-info">
             
             <h4>Booking #{{row.id}}</h4>
             <p>Client Name: {{row.cfname}} {{row.clname}}</p>
