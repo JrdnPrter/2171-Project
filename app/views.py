@@ -177,7 +177,7 @@ def editBooking(bookingid):
             db.session.commit()
             
 
-            flash("Booking Updated")
+            flash("Booking Updated", 'success')
             return redirect(url_for('viewBooking'))
     
 
