@@ -48,3 +48,16 @@ h1 .megamind{
     background-color: #00bfff;
     transition: 0.5s all;
 }
+
+.view-booking {
+    padding-top: 20px;
+}
+
+.equipmentlist {
+    padding-left: 40px;
+}
+
+.equipmentlist li {
+    padding-left: 10px;
+    list-style: lower-roman;
+}
