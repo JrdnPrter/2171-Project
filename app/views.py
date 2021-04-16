@@ -31,8 +31,8 @@ def home():
 @app.route('/about/')
 def about():
     """Render the website's about page."""
-    return render_template('about.html', name="TRK Party Rentals")
-
+    return render_template('about.html', name="TRK Party Rentals", g1="Brendon Sadler", g2="Shane-Michael Thompson", g3="Jordon Porter", g4="Shevon Chisholm", g5="Odane Williams")
+ 
 @app.route('/booking/', methods=['GET', 'POST'])
 @login_required
 def createBooking():
