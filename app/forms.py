@@ -32,7 +32,7 @@ class BookingForm(FlaskForm):
     contact = StringField('Phone Number (10-digit)', 
                                 validators=[DataRequired()])
 
-    eventDate = DateField('Event Date (YYYY/MM/DD)', 
+    eventDate = DateField('Event Date (YYYY-MM-DD)', 
                                 validators=[DataRequired()])
 
     eventTime = StringField('Event Start Time (Hour:Minute) ')
